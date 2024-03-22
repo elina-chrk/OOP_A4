@@ -1,45 +1,44 @@
 #include <iostream>
+#include <iomanip>
 #include "ball.h"
 #include "Log.h"
 
 using namespace std;
 
-// Function to convert Ball::Colour enum to string
-string colourToString(Ball::Colour colour) {
+string colourToString(BallSpec::Colour colour) {
     switch (colour) {
-    case Ball::Colour::RED:
+    case BallSpec::Colour::RED:
         return "Red";
-    case Ball::Colour::BLUE:
+    case BallSpec::Colour::BLUE:
         return "Blue";
-    case Ball::Colour::GREEN:
+    case BallSpec::Colour::GREEN:
         return "Green";
     default:
         return "Unknown Colour";
     }
 }
 
-// Function to convert Ball::Type enum to string
-string typeToString(Ball::Type type) {
+string typeToString(BallSpec::Type type) {
     switch (type) {
-    case Ball::Type::BASKETBALL:
+    case BallSpec::Type::BASKETBALL:
         return "Basketball";
-    case Ball::Type::VOLLEYBALL:
+    case BallSpec::Type::VOLLEYBALL:
         return "Volleyball";
-    case Ball::Type::SOCCER:
+    case BallSpec::Type::SOCCER:
         return "Soccer";
     default:
         return "Unknown Type";
     }
 }
 
-
 void show(const Ball& item) {
-    cout << "Colour: " << colourToString(item.get_colour()) << ", "
-        << "Type: " << typeToString(item.get_type()) << ", "
-        << "Price: " << item.get_price() << ", "
+    auto is = item.get_spec();
+
+    cout << "Colour: " << colourToString(is.get_colour()) << ", "
+        << "Type: " << typeToString(is.get_type()) << ", "
+        << "Price: " << fixed << setprecision(2) << item.get_price() << ", "
         << "Manufacturer: " << item.get_manufacturer() << endl;
 }
-
 
 Ball max_price(const Log& log) {
     Ball max_item;
@@ -62,22 +61,39 @@ Ball max_price(const Log& log) {
 
 int main() {
     Log log;
-    log.init();
 
-    log.add_item(Ball::Colour::RED, Ball::Type::BASKETBALL, 67.88, "Vivo");
-    log.add_item(Ball::Colour::BLUE, Ball::Type::VOLLEYBALL, 455.88, "Kero");
+    // Adding some example Balls to the log
+    BallSpec spec1(BallSpec::Type::SOCCER, BallSpec::Colour::RED);
+    log.add_item(10.99, "Kero", spec1);
 
-    Ball qry(Ball::Colour::BLUE, Ball::Type::VOLLEYBALL, 455.88, "Kero");
-    show(log.find_item(qry));
+    BallSpec spec2(BallSpec::Type::BASKETBALL, BallSpec::Colour::BLUE);
+    log.add_item(15.99, "Miba", spec2);
 
-    qry = Ball(Ball::Colour::RED, Ball::Type::ANY, 0, "");
-    show(log.find_item(qry));
+    BallSpec spec_beach(BallSpec::Type::SOCCER, BallSpec::Colour::BLUE);
+    log.add_item(15.99, "Romet Vintage M brown", spec_beach);
+    log.add_item(17.99, "Romet Vintage M green", spec_beach);
 
-    qry = Ball(Ball::Colour::ANY, Ball::Type::ANY, 0, "Miba");
-    show(log.find_item(qry));
+    // Querying for a Ball with specific specifications
+    BallSpec query_spec(BallSpec::Type::SOCCER, BallSpec::Colour::BLUE);
+    Ball found_ball = log.find_item(Ball(0.0, "", query_spec));
 
+    if (found_ball.get_manufacturer() != "") {
+        cout << "Found ball matching the query specifications:\n";
+        show(found_ball);
+    } else {
+        cout << "No ball found matching the query specifications.\n";
+    }
 
-    // show(max_price(log));
+    // Testing with another set of query values
+    BallSpec query_spec2(BallSpec::Type::BASKETBALL, BallSpec::Colour::RED);
+    found_ball = log.find_item(Ball(0.0, "", query_spec2));
+
+    if (found_ball.get_manufacturer() != "") {
+        cout << "Found ball matching the second query specifications:\n";
+        show(found_ball);
+    } else {
+        cout << "No ball found matching the second query specifications.\n";
+    }
 
     return 0;
 }

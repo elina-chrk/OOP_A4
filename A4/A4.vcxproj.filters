@@ -24,12 +24,18 @@
     <ClCompile Include="Log.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="BallSpec.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="BallSpec.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

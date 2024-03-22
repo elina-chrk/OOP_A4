@@ -2,31 +2,24 @@
 #define BALL_H
 
 #include <string>
+#include "BallSpec.h"
 
 class Ball {
 public:
-    enum class Colour { ANY, RED, BLUE, GREEN };
-    enum class Type { ANY, BASKETBALL, VOLLEYBALL, SOCCER };
+    Ball() 
+        : _price{ 0.0 }, _manufacturer{ "" }, _spec{ } { }
 
-    static constexpr std::string_view Colour_str[]{ "Any", "Red", "Blue", "Green" };
-    static constexpr std::string_view Type_str[]{ "Any", "Basketball", "Volleyball", "Soccer" };
-
-
-    Ball(Colour colour, Type type, double price, const std::string& manufacturer);
-    Ball();
-
-    Colour get_colour() const { return _colour; }
-
-    Type get_type() const { return _type; }
+    Ball(double price, const std::string& manufacturer, const BallSpec& spec);
 
     double get_price() const { return _price; }
     std::string get_manufacturer() const { return _manufacturer; }
+    const BallSpec& get_spec() const { return _spec; }
 
 private:
-    Colour _colour;
-    Type _type;
     double _price;
     std::string _manufacturer;
+    BallSpec _spec;
 };
+
 
 #endif
