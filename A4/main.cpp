@@ -77,7 +77,7 @@ int main() {
 
     Ball expected_ball(10.99, "Kero", spec);
 
-    // Assertions to check if the found Ball matches the expected one
+    // assertions to check if the found Ball matches the expected one
     assert(found_ball_spec.get_price() == expected_ball.get_price());
     assert(found_ball_spec.get_manufacturer() == expected_ball.get_manufacturer());
     assert(found_ball_spec.get_spec().get_type() == expected_ball.get_spec().get_type());

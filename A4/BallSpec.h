@@ -18,9 +18,7 @@ public:
     BallSpec(Type type, Colour colour)
         : _type{ type }
         , _colour{ colour }
-    {
-        // std::cout << "BicycleSpec(..) called\n";
-    }
+    {}
 
     Type get_type() const { return _type; }
     Colour get_colour() const { return _colour; }
