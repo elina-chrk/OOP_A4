@@ -1,7 +1,7 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include "Ball.h"  // Include the necessary header file for Ball class
+#include "Ball.h"
 
 class Log {
 public:
@@ -11,9 +11,11 @@ public:
 
     Ball get_item(size_t i) const { return (i < _count) ? _items[i] : Ball{}; }
 
-    void add_item( double price, const std::string& manufacturer, const BallSpec& spec);
+    void add_item(double price, const std::string& manufacturer, const BallSpec& spec);
 
     Ball find_item(const Ball& query);
+
+    Ball find_item(const BallSpec& spec_query);
 
 private:
     static const size_t MAX_SIZE{ 10 };

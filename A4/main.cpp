@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 #include "ball.h"
 #include "Log.h"
 
@@ -31,15 +32,6 @@ string typeToString(BallSpec::Type type) {
     }
 }
 
-void show(const Ball& item) {
-    auto is = item.get_spec();
-
-    cout << "Colour: " << colourToString(is.get_colour()) << ", "
-        << "Type: " << typeToString(is.get_type()) << ", "
-        << "Price: " << fixed << setprecision(2) << item.get_price() << ", "
-        << "Manufacturer: " << item.get_manufacturer() << endl;
-}
-
 Ball max_price(const Log& log) {
     Ball max_item;
     double max_price = 0.0;
@@ -62,38 +54,41 @@ Ball max_price(const Log& log) {
 int main() {
     Log log;
 
-    // Adding some example Balls to the log
-    BallSpec spec1(BallSpec::Type::SOCCER, BallSpec::Colour::RED);
-    log.add_item(10.99, "Kero", spec1);
+    BallSpec spec(BallSpec::Type::SOCCER, BallSpec::Colour::BLUE);
 
-    BallSpec spec2(BallSpec::Type::BASKETBALL, BallSpec::Colour::BLUE);
-    log.add_item(15.99, "Miba", spec2);
+    log.add_item(10.99, "Kero", spec);
+    log.add_item(15.99, "Miba", spec);
+    log.add_item(17.99, "Romet Vintage M brown", spec);
+    log.add_item(20.99, "Romet Vintage M green", spec);
 
-    BallSpec spec_beach(BallSpec::Type::SOCCER, BallSpec::Colour::BLUE);
-    log.add_item(15.99, "Romet Vintage M brown", spec_beach);
-    log.add_item(17.99, "Romet Vintage M green", spec_beach);
-
-    // Querying for a Ball with specific specifications
-    BallSpec query_spec(BallSpec::Type::SOCCER, BallSpec::Colour::BLUE);
-    Ball found_ball = log.find_item(Ball(0.0, "", query_spec));
+    Ball found_ball = log.find_item(spec);
 
     if (found_ball.get_manufacturer() != "") {
         cout << "Found ball matching the query specifications:\n";
-        show(found_ball);
-    } else {
+        cout << "Price: " << found_ball.get_price() << endl;
+        cout << "Manufacturer: " << found_ball.get_manufacturer() << endl;
+    }
+    else {
         cout << "No ball found matching the query specifications.\n";
     }
 
-    // Testing with another set of query values
-    BallSpec query_spec2(BallSpec::Type::BASKETBALL, BallSpec::Colour::RED);
-    found_ball = log.find_item(Ball(0.0, "", query_spec2));
+    Ball found_ball_spec = log.find_item(spec);
+    Ball found_ball_query = log.find_item(Ball(0.0, "", spec));
 
-    if (found_ball.get_manufacturer() != "") {
-        cout << "Found ball matching the second query specifications:\n";
-        show(found_ball);
-    } else {
-        cout << "No ball found matching the second query specifications.\n";
-    }
+    Ball expected_ball(10.99, "Kero", spec);
+
+    // Assertions to check if the found Ball matches the expected one
+    assert(found_ball_spec.get_price() == expected_ball.get_price());
+    assert(found_ball_spec.get_manufacturer() == expected_ball.get_manufacturer());
+    assert(found_ball_spec.get_spec().get_type() == expected_ball.get_spec().get_type());
+    assert(found_ball_spec.get_spec().get_colour() == expected_ball.get_spec().get_colour());
+
+    assert(found_ball_query.get_price() == expected_ball.get_price());
+    assert(found_ball_query.get_manufacturer() == expected_ball.get_manufacturer());
+    assert(found_ball_query.get_spec().get_type() == expected_ball.get_spec().get_type());
+    assert(found_ball_query.get_spec().get_colour() == expected_ball.get_spec().get_colour());
+
+    cout << "All assertions passed successfully.\n";
 
     return 0;
 }
